@@ -9,6 +9,7 @@ import CategoryDistributionChart from "../components/overview/CategoryDistributi
 import SalesChannelChart from "../components/overview/SalesChannelChart";
 import UrbanFarmMap3D from "../components/overview/UrbanFarmMap3D";
 import PlantationControls from "../components/overview/PlantationControls";
+import CropScene from "./crops3D/CropScene";
 
 
 
@@ -135,7 +136,7 @@ const OverviewPage = () => {
 
   return (
     <div className="flex-1 overflow-auto relative z-10">
-      <Header title="DASHBOARD INTEGRADO - RADIOTAXIS & HUERTOS URBANOS" />
+      <Header title="DASHBOARD INTEGRADO - HUERTOS URBANOS" />
 
       <main className="max-w-7xl mx-auto py-6 px-4 lg:px-8">
         {/* BARRA DE PRONÓSTICOS DEL TIEMPO */}
@@ -217,7 +218,11 @@ const OverviewPage = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
             {/* Mapa 3D - Ocupa 2 columnas */}
             <div className="lg:col-span-2">
-              <UrbanFarmMap3D />
+              {/*<UrbanFarmMap3D />*/}
+              <div style={{ height: "80vh", width: "80vw", background: "#e8f1efff" }}>
+                    
+                      <CropScene />
+                  </div>
             </div>
             
             {/* Controles - Ocupa 1 columna */}
