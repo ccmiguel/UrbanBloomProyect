@@ -7,6 +7,85 @@ import * as THREE from 'three';
 // Colores para diferentes tipos de plantas basados en eficiencia
 const PLANT_COLORS = ['#00C49F', '#0088FE', '#FFBB28', '#FF8042', '#8884d8'];
 
+// Datos de ejemplo para plantas
+const SAMPLE_PLANTS = [
+  {
+    id: 1,
+    Species: "Eucalyptus globulus",
+    Plant_taxonomy: "A",
+    Plant_type: "E",
+    Longitude: -68.1193,
+    Latitude: -16.5000,
+    Elevation: 3600,
+    Vcmax_25C: 79.29,
+    Jmax_25C: 160.87,
+    Leaf_N: 1.67,
+    Leaf_P: 0.19,
+    SLA: 12.5,
+    Measurement_year: "2024"
+  },
+  {
+    id: 2,
+    Species: "Quinua Real",
+    Plant_taxonomy: "C",
+    Plant_type: "C",
+    Longitude: -68.1500,
+    Latitude: -16.5200,
+    Elevation: 3800,
+    Vcmax_25C: 45.2,
+    Jmax_25C: 95.3,
+    Leaf_N: 2.1,
+    Leaf_P: 0.25,
+    SLA: 15.8,
+    Measurement_year: "2024"
+  },
+  {
+    id: 3,
+    Species: "Papa Andina",
+    Plant_taxonomy: "C",
+    Plant_type: "C",
+    Longitude: -68.1300,
+    Latitude: -16.5100,
+    Elevation: 3700,
+    Vcmax_25C: 32.1,
+    Jmax_25C: 75.8,
+    Leaf_N: 1.8,
+    Leaf_P: 0.22,
+    SLA: 18.2,
+    Measurement_year: "2024"
+  },
+  {
+    id: 4,
+    Species: "Maíz Boliviano",
+    Plant_taxonomy: "C",
+    Plant_type: "C",
+    Longitude: -68.1400,
+    Latitude: -16.5300,
+    Elevation: 3500,
+    Vcmax_25C: 28.5,
+    Jmax_25C: 68.9,
+    Leaf_N: 1.9,
+    Leaf_P: 0.21,
+    SLA: 16.5,
+    Measurement_year: "2024"
+  },
+  {
+    id: 5,
+    Species: "Tomate de Árbol",
+    Plant_taxonomy: "A",
+    Plant_type: "E",
+    Longitude: -68.1250,
+    Latitude: -16.5150,
+    Elevation: 3650,
+    Vcmax_25C: 55.7,
+    Jmax_25C: 112.4,
+    Leaf_N: 2.3,
+    Leaf_P: 0.28,
+    SLA: 14.1,
+    Measurement_year: "2024"
+  }
+];
+
 const PlantModel3D = ({ plant, position, onClick }) => {
   const meshRef = React.useRef();
   
@@ -51,7 +130,6 @@ const PlantModel3D = ({ plant, position, onClick }) => {
           color="white" 
           anchorX="center" 
           anchorY="middle"
-          font="/fonts/Inter-Bold.woff"
         >
           {plant.Species}
         </Text>
@@ -63,12 +141,27 @@ const PlantModel3D = ({ plant, position, onClick }) => {
 const UrbanFarmMap3D = () => {
   const [plantData, setPlantData] = useState([]);
   const [selectedPlant, setSelectedPlant] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // Cambiado a false
 
-  // Cargar datos de plantas desde el backend
+  // Cargar datos de plantas - versión con datos de ejemplo
   useEffect(() => {
+    setLoading(true);
+    
+    // Simular carga de datos
+    setTimeout(() => {
+      setPlantData(SAMPLE_PLANTS);
+      setLoading(false);
+    }, 1000);
+    
+    // Si quieres intentar cargar desde el backend, descomenta esto:
+    /*
     fetch('http://localhost:3001/api/plants')
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Endpoint no disponible');
+        }
+        return response.json();
+      })
       .then((data) => {
         const formattedData = data.map((plant, index) => ({
           id: plant.id || index,
@@ -89,9 +182,12 @@ const UrbanFarmMap3D = () => {
         setLoading(false);
       })
       .catch((error) => {
-        console.error('Error cargando datos de plantas:', error);
+        console.error('Error cargando datos de plantas, usando datos de ejemplo:', error);
+        // En caso de error, usar datos de ejemplo
+        setPlantData(SAMPLE_PLANTS);
         setLoading(false);
       });
+    */
   }, []);
 
   // Posicionar plantas en el mapa 3D

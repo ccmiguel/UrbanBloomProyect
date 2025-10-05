@@ -27,50 +27,63 @@ const OverviewPage = () => {
     huertosActivos: 0
   });
 
+  // Estado para filtros del mapa 3D
+  const [filters, setFilters] = useState({
+    minVcmax: 0,
+    plantType: 'all'
+  });
+
   // Función para obtener datos de radiotaxis
   const fetchData = async () => {
-    const responses = await Promise.all([
-      fetch("http://localhost:3001/macrodistritos"),
-      fetch("http://localhost:3001/radiotaxis-cantidad"),
-      fetch("http://localhost:3001/tipo_operador"),
-      fetch("http://localhost:3001/macrodistrito-estadisticas"),
-    ]);
+    try {
+      const responses = await Promise.all([
+        fetch("http://localhost:3001/macrodistritos"),
+        fetch("http://localhost:3001/radiotaxis-cantidad"),
+        fetch("http://localhost:3001/tipo_operador"),
+        fetch("http://localhost:3001/macrodistrito-estadisticas"),
+      ]);
 
-    const [
-      macrodistritos,
-      cantidadRadiotaxis,
-      tipoOperador,
-      estadisticasMacrodistritos,
-    ] = await Promise.all(responses.map((response) => response.json()));
+      const [
+        macrodistritos,
+        cantidadRadiotaxis,
+        tipoOperador,
+        estadisticasMacrodistritos,
+      ] = await Promise.all(responses.map((response) => response.json()));
 
-    setStats({
-      macrodistritos: macrodistritos.cantidad_macrodistritos,
-      cantidadRadiotaxis: cantidadRadiotaxis.cantidad_radiotaxis,
-      tipoOperador: tipoOperador.length,
-      promedioRadiotaxis: estadisticasMacrodistritos[0]?.promedio || 0,
-    });
+      setStats({
+        macrodistritos: macrodistritos.cantidad_macrodistritos,
+        cantidadRadiotaxis: cantidadRadiotaxis.cantidad_radiotaxis,
+        tipoOperador: tipoOperador.length,
+        promedioRadiotaxis: estadisticasMacrodistritos[0]?.promedio || 0,
+      });
+    } catch (error) {
+      console.error("Error fetching radiotaxi data:", error);
+    }
   };
 
-  // Función para obtener datos de huertos urbanos
+  // Función para obtener datos de huertos urbanos (simulados por ahora)
   const fetchFarmData = async () => {
     try {
-      const response = await fetch("http://localhost:3001/api/plants");
-      const plantsData = await response.json();
+      // Datos simulados mientras configuras el backend
+      const simulatedData = {
+        totalPlantas: 12,
+        especiesUnicas: 8,
+        eficienciaPromedio: 45.2,
+        huertosActivos: 3
+      };
       
-      // Calcular estadísticas de plantas
-      const especiesUnicas = [...new Set(plantsData.map(p => p.Species))].length;
-      const vcmaxPromedio = plantsData.reduce((acc, plant) => 
-        acc + (parseFloat(plant.Vcmax_25C) || 0), 0) / plantsData.length;
-      
-      setFarmStats({
-        totalPlantas: plantsData.length,
-        especiesUnicas: especiesUnicas,
-        eficienciaPromedio: Math.round(vcmaxPromedio * 100) / 100,
-        huertosActivos: Math.ceil(plantsData.length / 10) // Estimación basada en plantas
-      });
+      setFarmStats(simulatedData);
     } catch (error) {
       console.error("Error cargando datos de huertos:", error);
     }
+  };
+
+  // Manejar cambios en los filtros
+  const handleFilterChange = (filterName, value) => {
+    setFilters(prev => ({
+      ...prev,
+      [filterName]: value
+    }));
   };
 
   useEffect(() => {
@@ -139,7 +152,10 @@ const OverviewPage = () => {
             
             {/* Controles - Ocupa 1 columna */}
             <div className="lg:col-span-1">
-              <PlantationControls />
+              <PlantationControls 
+                filters={filters}
+                onFilterChange={handleFilterChange}
+              />
             </div>
           </div>
         </motion.div>

@@ -539,6 +539,47 @@ app.get('/minibuses/demanda-operador', async (req, res) => {
     }
 });
 
+
+
+// PLANTAS 
+
+// En server.js de tu backend
+app.get('/api/plants', (req, res) => {
+  const samplePlants = [
+    {
+      id: 1,
+      Species: "Eucalyptus globulus",
+      Plant_taxonomy: "A",
+      Plant_type: "E",
+      Longitude: -68.1193,
+      Latitude: -16.5000,
+      Elevation: 3600,
+      Vcmax_25C: 79.29,
+      Jmax_25C: 160.87,
+      Leaf_N: 1.67,
+      Leaf_P: 0.19,
+      SLA: 12.5,
+      Measurement_year: "2024"
+    },
+    {
+      id: 2,
+      Species: "Quinua Real",
+      Plant_taxonomy: "C",
+      Plant_type: "C",
+      Longitude: -68.1500,
+      Latitude: -16.5200,
+      Elevation: 3800,
+      Vcmax_25C: 45.2,
+      Jmax_25C: 95.3,
+      Leaf_N: 2.1,
+      Leaf_P: 0.25,
+      SLA: 15.8,
+      Measurement_year: "2024"
+    }
+    // Agrega más plantas según necesites
+  ];
+  res.json(samplePlants);
+});
 // CRUD MINIBUSES
 
 // CREATE: Agregar un nuevo registro
