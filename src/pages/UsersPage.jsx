@@ -10,6 +10,11 @@ import UserDemographicsChart from "../components/users/UserDemographicsChart";
 import DemandaPorOperadorChart from "../components/users/DemandaPorOperadorChart";
 import DemandaPorTipoVehiculoChart from "../components/users/DemandaTipoVehiculoChart";
 import DemandaPorOperadorYTipoVehiculoChart from "../components/users/DemandaPorOperadorYTipoVehiculoChart";
+import Prediccion from "./ai_components/Prediccion";
+import MapaFloracion from "./ai_components/MapaFloracion";
+import Graficos from "./ai_components/Graficos";
+
+
 
 const userStats = {
 	totalUsers: 152845,
@@ -21,30 +26,12 @@ const userStats = {
 const UsersPage = () => {
 	return (
 		<div className='flex-1 overflow-auto relative z-10'>
-			<Header title='TRANSPORTE PUBLICO TERRESTRE LA PAZ' />
+			<Header title='PREDICCION AGRICOLA' />
+			<Prediccion/>
+			<MapaFloracion/>
+			<Graficos/>
 
-			<main className='max-w-7xl mx-auto py-6 px-4 lg:px-8'>
-				{/* STATS */}
-				<motion.div
-					className='grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8'
-					initial={{ opacity: 0, y: 20 }}
-					animate={{ opacity: 1, y: 0 }}
-					transition={{ duration: 1 }}
-				>
-				</motion.div>
 
-				<UsersTable />
-
-				{/* USER CHARTS */}
-				<div className='grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8'>
-					<UserGrowthChart />
-					<UserActivityHeatmap />
-					<UserDemographicsChart />
-					<DemandaPorOperadorChart/>
-					<DemandaPorTipoVehiculoChart/>
-					<DemandaPorOperadorYTipoVehiculoChart/>
-				</div>
-			</main>
 		</div>
 	);
 };
