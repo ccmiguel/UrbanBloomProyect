@@ -4,18 +4,18 @@ import { motion } from 'framer-motion';
 const PlantationControls = ({ filters, onFilterChange }) => {
   return (
     <motion.div
-      className="bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg rounded-xl p-4 border border-gray-700"
+      className=" backdrop-blur-md text-black shadow-lg rounded-xl p-4 border border-gray-700"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.8 }}
     >
-      <h3 className="text-md font-medium mb-3 text-gray-100">
+      <h3 className="text-md text-black font-medium mb-3">
         Filtros de Plantas
       </h3>
       
       <div className="space-y-3">
         <div>
-          <label className="block text-sm text-gray-400 mb-1">
+          <label className="block text-sm  mb-1">
             Eficiencia Mínima (Vcmax):
           </label>
           <input
@@ -26,13 +26,13 @@ const PlantationControls = ({ filters, onFilterChange }) => {
             onChange={(e) => onFilterChange('minVcmax', parseInt(e.target.value))}
             className="w-full"
           />
-          <div className="text-xs text-gray-500 text-center">
+          <div className="text-xs text-black text-center">
             {filters.minVcmax}
           </div>
         </div>
         
         <div>
-          <label className="block text-sm text-gray-400 mb-1">
+          <label className="block text-black text-sm mb-1">
             Tipo de Planta:
           </label>
           <select 

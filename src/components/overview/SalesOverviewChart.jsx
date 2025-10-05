@@ -1,62 +1,112 @@
-import { useState, useEffect } from "react";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import { motion } from "framer-motion";
-import axios from "axios";
+import { Thermometer, Droplets } from "lucide-react";
 
-const SalesOverviewChart = () => {
-  const [data, setData] = useState([]);
+const SaludCultivoChart = () => {
+  // Datos para el gráfico circular de salud general
+  const saludData = [
+    { name: "Salud", value: 85 },
+    { name: "Restante", value: 15 }
+  ];
 
-  useEffect(() => {
-    // Llamada a la API para obtener los datos
-    axios.get('http://localhost:3001/api/macrodistrito')
-      .then(response => {
-        // Transformar los datos para que el gráfico los pueda usar
-        const chartData = response.data.map(item => ({
-          name: item.macrodistrito,
-          promedio: item.promedio // Usamos el promedio como valor para las ventas
-        }));
-        setData(chartData);
-      })
-      .catch(error => {
-        console.error("Hubo un error al obtener los datos:", error);
-      });
-  }, []);
+  const COLORS = ["#10B981", "#E5E7EB"];
 
   return (
-    <motion.div
-      className='bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg rounded-xl p-6 border border-gray-700'
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.2 }}
-    >
-      <h2 className='text-lg font-medium mb-4 text-gray-100'>Promedio por Macrodistrito</h2>
+    <div className="space-y-6">
+      {/* Primera fila: Salud General, Temperatura y Humedad */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        {/* Salud General del Cultivo */}
+        <motion.div
+          className='bg-white shadow-lg rounded-xl p-6 border border-gray-200'
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          <h2 className='text-lg font-medium text-gray-800 mb-4'>Salud General del Cultivo</h2>
+          
+          <div className="flex items-center justify-between">
+            <div className="flex-1">
+              <div className="text-3xl font-bold text-gray-900 mb-2">85%</div>
+              <div className="text-sm text-gray-600 mb-1">NOVI</div>
+            </div>
+            
+            <div className="w-24 h-24">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={saludData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={25}
+                    outerRadius={40}
+                    paddingAngle={0}
+                    dataKey="value"
+                    startAngle={90}
+                    endAngle={450}
+                  >
+                    {saludData.map((entry, index) => (
+                      <Cell 
+                        key={`cell-${index}`} 
+                        fill={COLORS[index % COLORS.length]} 
+                        stroke="none"
+                      />
+                    ))}
+                  </Pie>
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        </motion.div>
 
-      <div className='h-80'>
-        <ResponsiveContainer width={"100%"} height={"100%"}>
-          <LineChart data={data}>
-            <CartesianGrid strokeDasharray='3 3' stroke='#4B5563' />
-            <XAxis dataKey={"name"} stroke='#9ca3af' />
-            <YAxis stroke='#9ca3af' />
-            <Tooltip
-              contentStyle={{
-                backgroundColor: "rgba(31, 41, 55, 0.8)",
-                borderColor: "#4B5563",
-              }}
-              itemStyle={{ color: "#E5E7EB" }}
-            />
-            <Line
-              type='monotone'
-              dataKey='promedio'
-              stroke='#6366F1'
-              strokeWidth={3}
-              dot={{ fill: "#6366F1", strokeWidth: 2, r: 6 }}
-              activeDot={{ r: 8, strokeWidth: 2 }}
-            />
-          </LineChart>
-        </ResponsiveContainer>
+        {/* Temperatura */}
+        <motion.div
+          className='bg-white shadow-lg rounded-xl p-6 border border-gray-200'
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+        >
+          <div className="flex items-center justify-between mb-4">
+            <h2 className='text-lg font-medium text-gray-800'>TEMPERATURA</h2>
+            <Thermometer className="text-gray-600" size={20} />
+          </div>
+
+          <div className="text-center">
+            <div className="text-2xl font-bold text-gray-900 mb-2">22°C</div>
+            <div className="text-sm text-green-600 font-medium">Excelente</div>
+          </div>
+        </motion.div>
+
+        {/* Humedad */}
+        <motion.div
+          className='bg-white shadow-lg rounded-xl p-6 border border-gray-200'
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+        >
+          <div className="flex items-center justify-between mb-4">
+            <h2 className='text-lg font-medium text-gray-800'>HUMEDAD</h2>
+            <Droplets className="text-gray-600" size={20} />
+          </div>
+
+          <div className="text-center">
+            <div className="text-2xl font-bold text-gray-900 mb-2">65%</div>
+            <div className="text-sm text-green-600 font-medium">Excelente</div>
+          </div>
+        </motion.div>
       </div>
-    </motion.div>
+
+      {/* Segunda fila: Charts */}
+      <div className="grid grid-cols-1 gap-6">
+        <div className="h-[200px]">
+          <SalesOverviewChart />
+        </div>
+        <div className="h-[800px]">
+          <CategoryDistributionChart />
+        </div>
+      </div>
+    </div>
   );
 };
 
-export default SalesOverviewChart;
+export default SaludCultivoChart;

@@ -1,4 +1,4 @@
-import { BarChart2, ShoppingBag, Users, Zap, Sprout } from "lucide-react";
+import { BarChart2, ShoppingBag, Users, Zap, Sprout, Sun, Snowflake } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 
@@ -9,6 +9,8 @@ import CategoryDistributionChart from "../components/overview/CategoryDistributi
 import SalesChannelChart from "../components/overview/SalesChannelChart";
 import UrbanFarmMap3D from "../components/overview/UrbanFarmMap3D";
 import PlantationControls from "../components/overview/PlantationControls";
+
+
 
 const OverviewPage = () => {
   // Estado para datos de radiotaxis
@@ -32,6 +34,46 @@ const OverviewPage = () => {
     minVcmax: 0,
     plantType: 'all'
   });
+
+  // Datos de pronósticos
+  const [pronosticos, setPronosticos] = useState([
+    {
+      id: 1,
+      nombre: "Riesgo de Helada en 24h",
+      tipo: "helada",
+      nivel: "alto",
+      color: "bg-red-500",
+      icono: Snowflake,
+      descripcion: "Temperatura mínima: -2°C"
+    },
+    {
+      id: 2,
+      nombre: "Soleado próximos 2 días",
+      tipo: "soleado",
+      nivel: "favorable",
+      color: "bg-green-500",
+      icono: Sun,
+      descripcion: "Temperatura máxima: 28°C"
+    },
+    {
+      id: 3,
+      nombre: "Vientos moderados",
+      tipo: "viento",
+      nivel: "moderado",
+      color: "bg-yellow-500",
+      icono: Zap,
+      descripcion: "Velocidad: 15-25 km/h"
+    },
+    {
+      id: 4,
+      nombre: "Lluvia leve en 48h",
+      tipo: "lluvia",
+      nivel: "bajo",
+      color: "bg-blue-500",
+      icono: Users,
+      descripcion: "Precipitación: 5-10 mm"
+    }
+  ]);
 
   // Función para obtener datos de radiotaxis
   const fetchData = async () => {
@@ -96,6 +138,46 @@ const OverviewPage = () => {
       <Header title="DASHBOARD INTEGRADO - RADIOTAXIS & HUERTOS URBANOS" />
 
       <main className="max-w-7xl mx-auto py-6 px-4 lg:px-8">
+        {/* BARRA DE PRONÓSTICOS DEL TIEMPO */}
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          {pronosticos.map((pronostico) => (
+            <motion.div
+              key={pronostico.id}
+              className={`${pronostico.color} rounded-lg p-4 text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105`}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <div className="flex items-center justify-between mb-2">
+                <pronostico.icono size={24} className="text-white" />
+                <span className="text-sm font-semibold bg-black bg-opacity-20 px-2 py-1 rounded-full">
+                  {pronostico.nivel.toUpperCase()}
+                </span>
+              </div>
+              
+              <h3 className="font-bold text-lg mb-1">{pronostico.nombre}</h3>
+              <p className="text-sm opacity-90">{pronostico.descripcion}</p>
+              
+              <div className="mt-3 flex items-center justify-between">
+                <span className="text-xs bg-white bg-opacity-20 px-2 py-1 rounded">
+                  {pronostico.tipo === "helada" ? "❄️" : 
+                   pronostico.tipo === "soleado" ? "☀️" :
+                   pronostico.tipo === "viento" ? "💨" : "🌧️"}
+                </span>
+                <div className={`w-3 h-3 rounded-full ${
+                  pronostico.color.includes('red') ? 'bg-red-700' :
+                  pronostico.color.includes('green') ? 'bg-green-700' :
+                  pronostico.color.includes('yellow') ? 'bg-yellow-700' : 'bg-blue-700'
+                }`} />
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+
         {/* STATS PRINCIPALES */}
         <motion.div
           className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8"
@@ -103,19 +185,7 @@ const OverviewPage = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
         >
-          {/* Stats de Radiotaxis */}
-          <StatCard
-            name="Total Macrodistritos"
-            icon={Zap}
-            value={stats.macrodistritos}
-            color="#6366F1"
-          />
-          <StatCard
-            name="Cantidad de Radiotaxis"
-            icon={Users}
-            value={stats.cantidadRadiotaxis}
-            color="#8B5CF6"
-          />
+          
           
           {/* Stats de Huertos Urbanos */}
           <StatCard
@@ -139,7 +209,7 @@ const OverviewPage = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
         >
-          <h2 className="text-2xl font-bold text-gray-100 mb-6 flex items-center">
+          <h2 className="text-2xl text-black font-bold mb-6 flex items-center">
             <Sprout className="mr-3 text-green-400" />
             🌿 Sistema de Huertos Urbanos Inteligentes
           </h2>
@@ -160,29 +230,7 @@ const OverviewPage = () => {
           </div>
         </motion.div>
 
-        {/* SECCIÓN RADIOTAXIS */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-        >
-          <h2 className="text-2xl font-bold text-gray-100 mb-6 flex items-center">
-            <Users className="mr-3 text-blue-400" />
-            🚗 Análisis de Radiotaxis
-          </h2>
-          
-          <div className="grid grid-cols-1 gap-12">
-            <div className="h-[500px]">
-              <SalesOverviewChart />
-            </div>
-            <div className="h-[500px]">
-              <CategoryDistributionChart />
-            </div>
-            <div className="h-[600px] w-full">
-              <SalesChannelChart />
-            </div>
-          </div>
-        </motion.div>
+        
 
         {/* STATS SECUNDARIOS */}
         <motion.div
@@ -191,18 +239,7 @@ const OverviewPage = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
         >
-          <StatCard
-            name="Tipos de Operador"
-            icon={Users}
-            value={stats.tipoOperador}
-            color="#F59E0B"
-          />
-          <StatCard
-            name="Promedio Radiotaxis/Macrodistrito"
-            icon={BarChart2}
-            value={stats.promedioRadiotaxis}
-            color="#10B981"
-          />
+          
           <StatCard
             name="Eficiencia Promedio Vcmax"
             icon={Sprout}
@@ -217,6 +254,9 @@ const OverviewPage = () => {
             color="#EC4899"
           />
         </motion.div>
+
+        
+
       </main>
     </div>
   );

@@ -205,23 +205,23 @@ const UrbanFarmMap3D = () => {
 
   return (
     <motion.div
-      className="bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg rounded-xl p-6 lg:col-span-2 border border-gray-700"
+      className="bg-[#66A5AD] text-black backdrop-blur-md shadow-lg rounded-xl p-6 lg:col-span-2 border border-gray-700"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.6 }}
     >
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-medium text-gray-100">
+        <h2 className="text-lg font-medium text-black">
           🌿 Mapa 3D de Huertos Urbanos
         </h2>
-        <div className="text-sm text-gray-400">
+        <div className="text-sm text-black">
           {plantData.length} plantas cargadas
         </div>
       </div>
 
       {loading ? (
         <div className="h-80 flex items-center justify-center">
-          <p className="text-gray-400">Cargando plantas...</p>
+          <p className="text-black">Cargando plantas...</p>
         </div>
       ) : (
         <div className="h-80 relative rounded-lg overflow-hidden">
@@ -250,7 +250,7 @@ const UrbanFarmMap3D = () => {
             >
               <planeGeometry args={[30, 30]} />
               <meshStandardMaterial 
-                color="#2D5A27" 
+                color="#AEBD38" 
                 roughness={0.8}
                 metalness={0.2}
               />
@@ -276,7 +276,7 @@ const UrbanFarmMap3D = () => {
           </Canvas>
 
           {/* Leyenda de colores */}
-          <div className="absolute bottom-4 left-4 bg-gray-900 bg-opacity-70 p-3 rounded-lg">
+          <div className="absolute bottom-4 left-4 bg-gray-900 p-3 rounded-lg">
             <div className="text-white text-sm font-medium mb-2">Eficiencia Vcmax:</div>
             <div className="flex flex-col space-y-1">
               <div className="flex items-center">
@@ -298,7 +298,7 @@ const UrbanFarmMap3D = () => {
 
       {/* Modal de información de planta */}
       {selectedPlant && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black flex items-center justify-center z-50">
           <motion.div
             className="bg-gray-800 rounded-xl p-6 max-w-md w-full mx-4"
             initial={{ opacity: 0, scale: 0.9 }}
